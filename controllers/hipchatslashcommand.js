@@ -2,11 +2,15 @@
 
 const HipChatSlashCommand = require('../models/hipchatslashcommand.js');
 
-function returnMessage(req, res, next) {
+function processInput(req, res, next) {
+  const slashCommand = new HipChatSlashCommand(_parseInput(req, res, next));
+
+};
+
+function _returnMessage(req, res, next) {
   const slashCommand = _parseInput(req, res, next);
   res.json({message: slashCommand.getRawMessage()});
 };
-
 
 function _parseInput(req, res, next) {
   const mentionName = req.body.item.message.from.mention_name;
@@ -23,11 +27,10 @@ function _parseInput(req, res, next) {
     rawMessage: rawMessage
   };
 
-  const slashCommand = new HipChatSlashCommand(params);
-  return slashCommand;
+  return params;
 };
 
 
 module.exports = {
-  returnMessage: returnMessage
+  processInput: processInput
 };
